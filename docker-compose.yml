@@ -1,0 +1,33 @@
+version: "3.1"
+services:
+  web:
+    build: ./smartLockApi
+    volumes:
+      - ./smartLockApi:/app
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+
+  frontend:
+    build: ./samrtLockApp
+    ports:
+      - 3000:3000
+    depends_on:
+      - web
+
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_DB: smartLock
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 3101
+      PGDATA: /data/postgres
+#    volumes:
+#      - postgres:/data/postgres
+    ports:
+      - "5433:5432"
+#    networks:
+#      - postgres
+    restart: unless-stopped
