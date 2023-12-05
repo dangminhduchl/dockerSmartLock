@@ -8,11 +8,12 @@ services:
       - 8000:8000
     depends_on:
       - postgres
+      - redis  # Added dependency on the Redis service
 
   frontend:
     build: ./samrtLockApp
     volumes:
-    - ./samrtLockApp:/app
+      - ./samrtLockApp:/app
     ports:
       - 3000:3000
     depends_on:
@@ -26,10 +27,14 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 3101
       PGDATA: /data/postgres
-#    volumes:
-#      - postgres:/data/postgres
     ports:
       - "5433:5432"
-#    networks:
-#      - postgres
     restart: unless-stopped
+
+  redis:
+    container_name: redis_container
+    image: redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
